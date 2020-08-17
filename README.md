@@ -1,6 +1,6 @@
 # House Scraper
 
-House Scraper es un web scraper que genera un CSV con todos los apartamentos que están siendo listados en la pagina web fincaraiz.com.co. La intención es poder ver y procesar los datos de una manera mas sencilla y encontrar el apartamento deseado.
+House Scraper es un web scraper que genera un CSV con todos los apartamentos en arriendo que están siendo listados en la pagina web fincaraiz.com.co. La intención es poder ver y procesar los datos de una manera mas sencilla y encontrar el apartamento deseado.
 
 ## Instalación
 
