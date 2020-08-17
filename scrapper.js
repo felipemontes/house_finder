@@ -2,6 +2,7 @@ const puppet = require("puppeteer");
 const fs = require("fs-extra");
 const URL =
   "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|1||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
+const TOTAL = 5;
 
 async function main() {
   try {
@@ -10,12 +11,12 @@ async function main() {
     if (!exists) {
       await fs.writeFile(
         "out.csv",
-        "URL,Ubicación,Precio,Admon,Area Priv.,Area Const.,Habitaciones,Baños,Parqueaderos\n"
+        "Actualizado,URL,Ubicación,Precio,Admon,Area Priv.,Area Const.,Habitaciones,Baños,Parqueaderos\n"
       );
     }
 
     // iterate over number of pages
-    for (let page_num = 1; page_num < 5; page_num++) {
+    for (let page_num = 1; page_num < TOTAL; page_num++) {
       const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
       await page.setUserAgent(
@@ -36,6 +37,10 @@ async function main() {
         const publication = publications[i];
         await publication.click();
         await page.waitForSelector(".boxcube");
+
+        // publication time stamp
+        const [dates] = await page.$x("//ul[contains(., 'Actualizado:')]");
+        const date = await dates.$eval("span", (span) => span.innerHTML);
 
         //url
         const publi_url = page.url();
@@ -115,6 +120,7 @@ async function main() {
         parkings = numbParkings.join("");
 
         console.log(`--- PAGE NUMBER : ${page_num} ---`);
+        console.log("Actualizado:", date);
         console.log(publi_url);
         console.log("Ubicacion: ", ubication);
         console.log("Precio: ", price);
@@ -127,7 +133,7 @@ async function main() {
 
         await fs.appendFile(
           "out.csv",
-          `"${publi_url}","${ubication}","${price}","${admin}","${privArea}","${area}","${bedrooms}","${bathrooms}","${parkings}"\n`
+          `"${date}","${publi_url}","${ubication}","${price}","${admin}","${privArea}","${area}","${bedrooms}","${bathrooms}","${parkings}"\n`
         );
       }
       await browser.close();
