@@ -1,10 +1,8 @@
 const puppet = require("puppeteer");
 const fs = require("fs-extra");
-const URL =
-  "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|1||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
-const TOTAL = 5;
 
-async function main() {
+async function getProperties(URL, TOTAL) {
+  console.log("Welcome to the scrapper");
   try {
     const exists = await fs.pathExists("out.csv");
 
@@ -16,7 +14,7 @@ async function main() {
     }
 
     // iterate over number of pages
-    for (let page_num = 1; page_num < TOTAL; page_num++) {
+    for (let page_num = 1; page_num <= TOTAL; page_num++) {
       const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
       await page.setUserAgent(
@@ -28,9 +26,15 @@ async function main() {
 
       // iterate over number of publications publications.length
       for (let i = 0; i < publications.length; i++) {
-        await page.goto(
-          `https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|${page_num}||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||`
-        );
+        let iterUrl = ``;
+        if (
+          URL ===
+          "https://www.fincaraiz.com.co/apartamentos/arriendo/medellin/?ad=30|1||||2||8|||55|5500006||||||||||||||||1|||1||griddate%20desc||||||"
+        ) {
+          iterUrl = `https://www.fincaraiz.com.co/apartamentos/arriendo/medellin/?ad=30|${page_num}||||2||8|||55|5500006||||||||||||||||1|||1||griddate%20desc||||||`;
+        }
+
+        await page.goto(iterUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
 
@@ -138,9 +142,32 @@ async function main() {
       }
       await browser.close();
     }
+    return "Process completed";
   } catch (error) {
     console.error("Error: ", error);
   }
 }
 
-main();
+async function selectOptions(city, quantity) {
+  //server input
+  let URL = "";
+  let TOTAL = quantity;
+
+  console.log(city);
+  switch (city) {
+    case "bogota":
+      URL =
+        "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|1||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
+      break;
+    case "medellin":
+      console.log("Entro a medellin");
+      URL =
+        "https://www.fincaraiz.com.co/apartamentos/arriendo/medellin/?ad=30|1||||2||8|||55|5500006||||||||||||||||1|||1||griddate%20desc||||||";
+    default:
+      break;
+  }
+
+  return await getProperties(URL, TOTAL);
+}
+
+module.exports = selectOptions;
