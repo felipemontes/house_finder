@@ -15,9 +15,9 @@ router.post("/", async (req, res) => {
   const option = req.body.option;
   const proper = req.body.property;
   const quantity = req.body.quantity;
-  const ans = await selectOptions(city, quantity);
+  const ans = await selectOptions(city, quantity, option);
   console.log(ans);
-  res.send(ans);
+  res.sendStatus(ans);
 });
 
 app.listen(PORT, () => {
