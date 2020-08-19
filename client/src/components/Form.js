@@ -54,7 +54,7 @@ export default class Form extends Component {
               onChange={this.onChange}
             >
               <option value=""></option>
-              <option value="apartamento">Apartamento</option>
+              <option value="apto">Apartamento</option>
               <option value="casa">Casa</option>
             </select>
           </label>
