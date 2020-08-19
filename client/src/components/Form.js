@@ -5,6 +5,8 @@ export default class Form extends Component {
   state = {
     city: "",
     option: "",
+    property: "",
+    quantity: "",
   };
 
   onChange = (event) => {
@@ -18,6 +20,8 @@ export default class Form extends Component {
     const inf = {
       city: this.state.city,
       option: this.state.option,
+      property: this.state.property,
+      quantity: this.state.quantity,
     };
     const response = await axios.post("http://localhost:3001/", inf);
     console.log(response.status);
@@ -45,6 +49,20 @@ export default class Form extends Component {
           <label>
             Selecciona una opcion:
             <select
+              name="property"
+              value={this.state.property}
+              onChange={this.onChange}
+            >
+              <option value=""></option>
+              <option value="apartamento">Apartamento</option>
+              <option value="casa">Casa</option>
+            </select>
+          </label>
+          <br />
+          <br />
+          <label>
+            Selecciona una opcion:
+            <select
               name="option"
               value={this.state.option}
               onChange={this.onChange}
@@ -53,6 +71,17 @@ export default class Form extends Component {
               <option value="venta">Venta</option>
               <option value="arriendo">Arriendo</option>
             </select>
+          </label>
+          <br />
+          <br />
+          <label>
+            Ingresa cantidad de paginas:
+            <input
+              type="text"
+              name="quantity"
+              value={this.state.quantity}
+              onChange={this.onChange}
+            />
           </label>
           <br />
           <br />
