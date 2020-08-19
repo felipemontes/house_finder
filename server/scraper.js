@@ -1,8 +1,10 @@
 const puppet = require("puppeteer");
 const fs = require("fs-extra");
 
-async function getProperties(URL, iterUrl, TOTAL) {
+async function getProperties(iterUrl, TOTAL) {
   console.log("Welcome to the scrapper");
+  console.log("TOTAL PAGES TO ITERATE: ", TOTAL);
+
   try {
     const exists = await fs.pathExists("out.csv");
 
@@ -12,21 +14,24 @@ async function getProperties(URL, iterUrl, TOTAL) {
         "Actualizado,URL,Ubicación,Precio,Admon,Area Priv.,Area Const.,Habitaciones,Baños,Parqueaderos\n"
       );
     }
-
     // iterate over number of pages
     for (let page_num = 1; page_num <= TOTAL; page_num++) {
-      const browser = await puppet.launch({ headless: true });
+      const browser = await puppet.launch({ headless: false });
       const page = await browser.newPage();
       await page.setUserAgent(
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
       );
-      await page.goto(URL);
+
+      newUrl = iterUrl.replace("REP", `${page_num}`);
+      await page.goto(newUrl);
+      console.log("ESTA ES LA URL QUE ESTA ITERANDO: ", newUrl);
+
       await page.waitForSelector("#divAdverts");
       const publications = await page.$$(".advert");
 
-      // iterate over number of publications publications.length
+      // iterate over number of publications (publications.length)
       for (let i = 0; i < 5; i++) {
-        await page.goto(iterUrl);
+        await page.goto(newUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
 
@@ -42,10 +47,7 @@ async function getProperties(URL, iterUrl, TOTAL) {
         const publi_url = page.url();
 
         //ubication
-        /* const title = await page.$(".title");
-        const ubication = await title.$eval("span", (span) => span.innerHTML); */
         const titles = await page.$$(".title .box  span");
-        console.log("++++++++++++++ LONGITUD", titles.length);
         let firstSpan;
         let ubication;
         if (titles.length === 2) {
@@ -140,13 +142,18 @@ async function getProperties(URL, iterUrl, TOTAL) {
 
         // parking
         const [parking] = await page.$x(
-          '//*[@id="ctl00_phMasterPage_cAdvert_Details_1"]/div/span[3]'
+          '//*[@id="ctl00_phMasterPage_cAdvert_Details_1"]/div/span[4]'
         );
+        let numbParkings;
         const parkingText = await parking.getProperty("textContent");
         const rawParking = await parkingText.jsonValue();
-        const formatPark = rawParking.toString().trim();
-        let numbParkings = formatPark.match(/\d/g);
-        parkings = numbParkings.join("");
+        let formatPark = rawParking.toString().trim();
+        if (formatPark == "Sin especificar") {
+          parkings = "Sin especificar";
+        } else {
+          numbParkings = formatPark.match(/\d/g);
+          parkings = numbParkings.join("");
+        }
 
         console.log(`--- PAGE NUMBER : ${page_num} ---`);
         console.log("Actualizado:", date);
@@ -173,53 +180,4 @@ async function getProperties(URL, iterUrl, TOTAL) {
   }
 }
 
-async function selectOptions(city, quantity, option) {
-  //server input
-  let URL = "";
-  let iterUrl = "";
-  let TOTAL = quantity;
-  let page_num = 0;
-
-  console.log(city);
-  switch (city) {
-    case "bogota":
-      switch (option) {
-        case "arriendo":
-          URL =
-            "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|1||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
-          iterUrl = `https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|${page_num}||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||`;
-          break;
-        case "venta":
-          URL =
-            "https://www.fincaraiz.com.co/apartamentos/venta/bogota/?ad=30|1||||1||8|||67|3630001|||||||||||||||||||1||griddate%20desc||||||";
-          iterUrl = `https://www.fincaraiz.com.co/apartamentos/venta/bogota/?ad=30|${page_num}||||1||8|||67|3630001|||||||||||||||||||1||griddate%20desc||||||`;
-          break;
-        default:
-          break;
-      }
-      break;
-    case "medellin":
-      switch (option) {
-        case "arriendo":
-          URL =
-            "https://www.fincaraiz.com.co/apartamentos/arriendo/medellin/?ad=30|1||||2||8|||55|5500006||||||||||||||||1|||1||griddate%20desc||||||";
-          iterUrl = `https://www.fincaraiz.com.co/apartamentos/arriendo/medellin/?ad=30|${page_num}||||2||8|||55|5500006||||||||||||||||1|||1||griddate%20desc||||||`;
-          break;
-        case "venta":
-          URL =
-            "https://www.fincaraiz.com.co/apartamentos/venta/medellin/?ad=30|1||||1||8|||55|5500006|||||||||||||||||||1||griddate%20desc||||||";
-          iterUrl = `https://www.fincaraiz.com.co/apartamentos/venta/medellin/?ad=30|${page_num}||||1||8|||55|5500006|||||||||||||||||||1||griddate%20desc||||||`;
-          break;
-        default:
-          break;
-      }
-    default:
-      break;
-  }
-
-  const answer = await getProperties(URL, iterUrl, TOTAL);
-
-  return answer;
-}
-
-module.exports = selectOptions;
+module.exports = getProperties;
