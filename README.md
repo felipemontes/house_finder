@@ -22,11 +22,9 @@ Para iniciar el scraper:
 node scrapper.js
 ```
 
-![](https://i.imgur.com/X16cFYd.jpg)  
+![](https://i.imgur.com/X16cFYd.jpg)
 
-
-En la consola se van a ir viendo los diferentes datos obtenidos y cuando el scraper termine va a quedar un archivo llamado out.csv donde van a quedar guardados todos los datos obtenidos  
-
+En la consola se van a ir viendo los diferentes datos obtenidos y cuando el scraper termine va a quedar un archivo llamado out.csv donde van a quedar guardados todos los datos obtenidos
 
 ![](https://i.imgur.com/7DBRELu.jpg)
 
