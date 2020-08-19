@@ -3,7 +3,7 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 const PORT = 3001;
-const selectOptions = require("./scraper");
+const selectOptions = require("./selector");
 
 app.use(cors());
 app.use(express.json());
@@ -13,9 +13,9 @@ app.use(router);
 router.post("/", async (req, res) => {
   const city = req.body.city;
   const option = req.body.option;
-  const proper = req.body.property;
+  const type = req.body.property;
   const quantity = req.body.quantity;
-  const ans = await selectOptions(city, quantity, option);
+  const ans = await selectOptions(city, quantity, option, type);
   console.log(ans);
   res.sendStatus(ans);
 });
