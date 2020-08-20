@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import axios from "axios";
 import fileDownload from "js-file-download";
 import swal from "sweetalert";
+
 import "./styles/Form.css";
 export default class Form extends Component {
   state = {
     city: "",
     option: "",
     property: "",
-    quantity: "",
+    quantity: 1,
     downId: "",
   };
 
@@ -30,11 +31,14 @@ export default class Form extends Component {
       this.errorManager();
     }
     try {
+      this.hideSearch();
+      this.showLoading();
       const response = await axios.post("http://localhost:3001/", inf);
       if (response.status === 200) {
         this.setState({
           downId: response.data,
         });
+        this.hideLoading();
         this.showDownload();
       }
       console.log(response.status);
@@ -44,8 +48,23 @@ export default class Form extends Component {
   };
 
   showDownload = () => {
-    var content = document.getElementById("down");
-    content.style.display = "";
+    const content = document.getElementById("down");
+    content.style.display = "inline-block";
+  };
+
+  showLoading = () => {
+    const content = document.getElementById("loader");
+    content.style.display = "inline-block";
+  };
+
+  hideLoading = () => {
+    const content = document.getElementById("loader");
+    content.style.display = "none";
+  };
+
+  hideSearch = () => {
+    const content = document.getElementById("search");
+    content.style.display = "none";
   };
 
   download = async () => {
@@ -55,18 +74,20 @@ export default class Form extends Component {
       method: "GET",
       url: `http://localhost:3001/download/${getId}`,
     });
+    window.location.reload(false);
     window.open(fileDownload(response.data, output));
   };
 
-  errorManager = () => {
-    swal("Error", "Revise los datos e intente de nuevo", "error");
+  errorManager = async () => {
+    await swal("Error", "Revise los datos e intente de nuevo", "error");
+    window.location.reload(false);
   };
 
   render() {
     return (
       <div className="container">
         <div className="form-container sign-up-container">
-          <h1>Encuentre su inmueble deseado</h1>
+          <h1>Crear lista</h1>
 
           <h3>Ingresa tus datos de busqueda</h3>
           <form onSubmit={this.onSubmit}>
@@ -122,41 +143,90 @@ export default class Form extends Component {
               Ingresa cantidad de paginas:
               <br />
               <br />
-              <input
-                type="text"
-                name="quantity"
-                value={this.state.quantity}
-                onChange={this.onChange}
-              />
+              <label>
+                <input
+                  type="radio"
+                  name="quantity"
+                  value="1"
+                  checked={this.state.quantity === "1"}
+                  onChange={this.onChange}
+                />
+                1
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="quantity"
+                  value="2"
+                  checked={this.state.quantity === "2"}
+                  onChange={this.onChange}
+                />
+                2
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="quantity"
+                  value="3"
+                  checked={this.state.quantity === "3"}
+                  onChange={this.onChange}
+                />
+                3
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="quantity"
+                  value="4"
+                  checked={this.state.quantity === "4"}
+                  onChange={this.onChange}
+                />
+                4
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="quantity"
+                  value="5"
+                  checked={this.state.quantity === "5"}
+                  onChange={this.onChange}
+                />
+                5
+              </label>
             </label>
             <br />
             <br />
-            <button type="submit">Buscar!</button>
+            <div className="align-center">
+              <div id="loader" className="loader"></div>
+            </div>
+            <button id="search" type="submit" className="button1">
+              Buscar!
+            </button>
           </form>
-          <br />
-          <button id="down" style={{ display: "none" }} onClick={this.download}>
+          <button id="down" className="button2" onClick={this.download}>
             Download
           </button>
         </div>
         <div className="form-container sign-in-container del">
-          <h2>House scraper</h2>
+          <h1>House Finder</h1>
           <p>
-            House scraper es un web scraper que obtiene su informacion de
-            fincaraiz.com.co, descarge un archivo csv con su busqueda deseada y
-            navegue entre los resultados de forma sencilla
+            House Finder es un web scraper que genera un CSV a partir de las
+            propiedades listadas en fincaraiz.com.co. Descarge su archivo csv
+            con su busqueda deseada y navegue entre los resultados de forma
+            sencilla.
           </p>
           <p>
-            La intencion de house scraper es facilitar la busqueda de
-            propiedades
+            El CSV contiene nombre, precio, metros cuadrados entre otros
+            detalles.
           </p>
           <h2>Instrucciones</h2>
-
           <li>1)Ingrese los datos de busqueda</li>
           <li>2)Espere a que el scraper complete la busqueda</li>
           <li>
             3)Cuando se complete la busqueda aparecera el boton de descarga
           </li>
-          <li>4)Descargue el archivo csv con la informacion</li>
+          <li>4)Descargue el archivo CSV con la informacion</li>
+          <p>Follow Me:</p>
         </div>
       </div>
     );
