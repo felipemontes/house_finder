@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "fs-extra": "^9.0.1",
+    "nanoid": "^3.1.12",
     "nodemon": "^2.0.4",
     "puppeteer": "^5.2.1"
   }
