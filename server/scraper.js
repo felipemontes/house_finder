@@ -16,7 +16,7 @@ async function getProperties(iterUrl, TOTAL) {
     }
     // iterate over number of pages
     for (let page_num = 1; page_num <= TOTAL; page_num++) {
-      const browser = await puppet.launch({ headless: false });
+      const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
       await page.setUserAgent(
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
@@ -30,7 +30,7 @@ async function getProperties(iterUrl, TOTAL) {
       const publications = await page.$$(".advert");
 
       // iterate over number of publications (publications.length)
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 3; i++) {
         await page.goto(newUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
@@ -174,7 +174,7 @@ async function getProperties(iterUrl, TOTAL) {
       }
       await browser.close();
     }
-    return 200;
+    return "out.csv";
   } catch (error) {
     console.error("My error: ", error);
   }
