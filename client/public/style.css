@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
 /* body {
   margin: 0;
@@ -12,7 +12,6 @@
 }
 
 body {
-  background: linear-gradient(#141e30, #243b55);
   display: flex;
   justify-content: center;
   align-items: center;
