@@ -9,6 +9,7 @@ export default class Form extends Component {
     option: "",
     property: "",
     quantity: "",
+    downId: "",
   };
 
   onChange = (event) => {
@@ -31,6 +32,9 @@ export default class Form extends Component {
     try {
       const response = await axios.post("http://localhost:3001/", inf);
       if (response.status === 200) {
+        this.setState({
+          downId: response.data,
+        });
         this.showDownload();
       }
       console.log(response.status);
@@ -45,11 +49,13 @@ export default class Form extends Component {
   };
 
   download = async () => {
+    const getId = this.state.downId;
+    const output = new Date().toLocaleString() + ".csv";
     const response = await axios({
       method: "GET",
-      url: "http://localhost:3001/download",
+      url: `http://localhost:3001/download/${getId}`,
     });
-    window.open(fileDownload(response.data, "out.csv"));
+    window.open(fileDownload(response.data, output));
   };
 
   errorManager = () => {
