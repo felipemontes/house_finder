@@ -28,7 +28,6 @@ router.post("/", async (req, res) => {
     console.log("Estoy dentro del server y esta es la ans;", ans);
     res.status(200).send(ans);
   });
-  //const ans = await selectOptions(city, quantity, option, type);
 });
 
 router.get("/download/:id", async (req, res) => {
