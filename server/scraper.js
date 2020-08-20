@@ -3,10 +3,7 @@ const fs = require("fs-extra");
 const { nanoid } = require("nanoid");
 
 async function getProperties(iterUrl, TOTAL) {
-  console.log("Welcome to the scrapper");
-  console.log("TOTAL PAGES TO ITERATE: ", TOTAL);
   let outName = nanoid(5) + ".csv";
-  console.log("El nombre del archivo seria: ", outName);
 
   try {
     const exists = await fs.pathExists(outName);
@@ -21,19 +18,19 @@ async function getProperties(iterUrl, TOTAL) {
     for (let page_num = 1; page_num <= TOTAL; page_num++) {
       const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
+      await page.setDefaultNavigationTimeout(0);
       await page.setUserAgent(
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
       );
 
       newUrl = iterUrl.replace("REP", `${page_num}`);
       await page.goto(newUrl);
-      console.log("ESTA ES LA URL QUE ESTA ITERANDO: ", newUrl);
 
       await page.waitForSelector("#divAdverts");
       const publications = await page.$$(".advert");
 
       // iterate over number of publications (publications.length)
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 20; i++) {
         await page.goto(newUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
@@ -44,7 +41,12 @@ async function getProperties(iterUrl, TOTAL) {
 
         // publication time stamp
         const [dates] = await page.$x("//ul[contains(., 'Actualizado:')]");
-        const date = await dates.$eval("span", (span) => span.innerHTML);
+        let date;
+        if (dates === undefined) {
+          date = "Sin especificar";
+        } else {
+          date = await dates.$eval("span", (span) => span.innerHTML);
+        }
 
         //url
         const publi_url = page.url();
@@ -109,10 +111,10 @@ async function getProperties(iterUrl, TOTAL) {
           if (admin) {
             admin = admin.join("");
           } else {
-            admin = "N/A";
+            admin = "Sin especificar";
           }
         } else {
-          admin = "N/A";
+          admin = "Sin especificar";
         }
 
         // area
@@ -131,7 +133,12 @@ async function getProperties(iterUrl, TOTAL) {
         const rawBeds = await bedsText.jsonValue();
         const formatBeds = rawBeds.toString().trim();
         let numBed = formatBeds.match(/\d/g);
-        bedrooms = numBed.join("");
+        let bedrooms;
+        if (numBed === null) {
+          bedrooms = "Sin especificar";
+        } else {
+          bedrooms = numBed.join("");
+        }
 
         // bathrooms
         const [baths] = await page.$x(
@@ -141,7 +148,13 @@ async function getProperties(iterUrl, TOTAL) {
         const rawBaths = await bathsText.jsonValue();
         const formatBath = rawBaths.toString().trim();
         let numbBaths = formatBath.match(/\d/g);
-        bathrooms = numbBaths.join("");
+        // REVISAR
+        let bathrooms;
+        if (numbBaths === null) {
+          bathrooms = "Sin especificar";
+        } else {
+          bathrooms = numbBaths.join("");
+        }
 
         // parking
         const [parking] = await page.$x(
