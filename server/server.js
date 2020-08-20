@@ -3,8 +3,8 @@ const router = express.Router();
 const app = express();
 const fs = require("fs-extra");
 const cors = require("cors");
+const fork = require("child_process").fork;
 const PORT = 3001;
-const selectOptions = require("./selector");
 
 app.use(cors());
 app.use(express.json());
@@ -16,11 +16,19 @@ router.post("/", async (req, res) => {
   const option = req.body.option;
   const type = req.body.property;
   const quantity = req.body.quantity;
-  console.time("selectOptions");
-  const ans = await selectOptions(city, quantity, option, type);
-  console.timeEnd("selectOptions");
-  console.log("Estoy dentro del server y esta es la ans;", ans);
-  res.status(200).send(ans);
+
+  const select = fork("selector.js");
+  select.send({
+    city,
+    option,
+    type,
+    quantity,
+  });
+  select.on("message", (ans) => {
+    console.log("Estoy dentro del server y esta es la ans;", ans);
+    res.status(200).send(ans);
+  });
+  //const ans = await selectOptions(city, quantity, option, type);
 });
 
 router.get("/download/:id", async (req, res) => {
