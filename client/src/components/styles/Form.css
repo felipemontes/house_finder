@@ -6,12 +6,11 @@
   overflow: hidden;
   width: 800px;
   max-width: 100%;
-  min-height: 560px;
+  min-height: 580px;
 }
 
 .form-container {
   position: absolute;
-  top: 0;
   height: 100%;
 }
 
@@ -21,7 +20,7 @@
   width: 50%;
   height: 100%;
   text-align: center;
-  border-right: 1px solid black;
+  padding: 20px;
 }
 
 .sign-in-container {
@@ -30,9 +29,84 @@
   width: 50%;
   height: 100%;
   text-align: center;
+  padding: 20px;
+  color: white;
+  background: rgb(58, 136, 180);
+  background: linear-gradient(
+    90deg,
+    rgba(58, 136, 180, 1) 0%,
+    rgba(47, 29, 253, 1) 50%,
+    rgba(93, 69, 252, 1) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .del li {
   list-style: none;
   margin-top: 20px;
+}
+
+.button1 {
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid black;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: black;
+  text-align: center;
+  transition: all 0.2s;
+}
+.button1:hover {
+  color: white;
+  background-color: black;
+}
+
+.button2 {
+  display: none;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid black;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: black;
+  text-align: center;
+  transition: all 0.2s;
+}
+.button2:hover {
+  color: white;
+  background-color: black;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.loader {
+  display: none;
+  margin: 0 auto;
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #3498db; /* Blue */
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
