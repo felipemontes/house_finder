@@ -19,13 +19,15 @@ router.post("/", async (req, res) => {
   console.time("selectOptions");
   const ans = await selectOptions(city, quantity, option, type);
   console.timeEnd("selectOptions");
-  console.log(ans);
-  res.sendStatus(200);
+  console.log("Estoy dentro del server y esta es la ans;", ans);
+  res.status(200).send(ans);
 });
 
-router.get("/download", async (req, res) => {
-  let file = __dirname + "/out.csv";
-  res.download(file, "out.csv");
+router.get("/download/:id", async (req, res) => {
+  const dId = req.params.id;
+  console.log("LLEGUE AL ROUTER Y ESTE ES MI ID: ", dId);
+  let file = __dirname + `/${dId}`;
+  res.download(file);
   try {
     setTimeout(async () => {
       await fs.remove(file);
