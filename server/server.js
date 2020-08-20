@@ -16,7 +16,6 @@ router.post("/", async (req, res) => {
   const option = req.body.option;
   const type = req.body.property;
   const quantity = req.body.quantity;
-
   const select = fork("selector.js");
   select.send({
     city,
@@ -25,14 +24,12 @@ router.post("/", async (req, res) => {
     quantity,
   });
   select.on("message", (ans) => {
-    console.log("Estoy dentro del server y esta es la ans;", ans);
     res.status(200).send(ans);
   });
 });
 
 router.get("/download/:id", async (req, res) => {
   const dId = req.params.id;
-  console.log("LLEGUE AL ROUTER Y ESTE ES MI ID: ", dId);
   let file = __dirname + `/${dId}`;
   res.download(file);
   try {
