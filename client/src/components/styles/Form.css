@@ -14,7 +14,7 @@
   height: 100%;
 }
 
-.sign-up-container {
+.left-container {
   position: absolute;
   left: 0%;
   width: 50%;
@@ -23,7 +23,8 @@
   padding: 20px;
 }
 
-.sign-in-container {
+.right-container {
+  font-size: 13px;
   position: absolute;
   left: 50%;
   width: 50%;
@@ -40,6 +41,11 @@
   );
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.right-container a {
+  color: white;
+  margin-right: 10px;
 }
 
 .del li {
