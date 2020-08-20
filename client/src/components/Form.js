@@ -86,10 +86,11 @@ export default class Form extends Component {
   render() {
     return (
       <div className="container">
-        <div className="form-container sign-up-container">
+        <div className="form-container left-container">
           <h1>Crear lista</h1>
 
-          <h3>Ingresa tus datos de busqueda</h3>
+          <h3>Ingresa tus datos de búsqueda</h3>
+          <h6>*Versión de prueba Max 20 publicaciones *</h6>
           <form onSubmit={this.onSubmit}>
             <label>
               Selecciona una ciudad:
@@ -124,7 +125,7 @@ export default class Form extends Component {
             <br />
             <br />
             <label>
-              Selecciona una opcion:
+              Selecciona una opción:
               <br />
               <br />
               <select
@@ -140,7 +141,7 @@ export default class Form extends Component {
             <br />
             <br />
             <label>
-              Ingresa cantidad de paginas:
+              Ingresa cantidad de páginas:
               <br />
               <br />
               <label>
@@ -153,7 +154,7 @@ export default class Form extends Component {
                 />
                 1
               </label>
-              <label>
+              {/* <label>
                 <input
                   type="radio"
                   name="quantity"
@@ -172,27 +173,7 @@ export default class Form extends Component {
                   onChange={this.onChange}
                 />
                 3
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="quantity"
-                  value="4"
-                  checked={this.state.quantity === "4"}
-                  onChange={this.onChange}
-                />
-                4
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="quantity"
-                  value="5"
-                  checked={this.state.quantity === "5"}
-                  onChange={this.onChange}
-                />
-                5
-              </label>
+              </label> */}
             </label>
             <br />
             <br />
@@ -207,26 +188,52 @@ export default class Form extends Component {
             Download
           </button>
         </div>
-        <div className="form-container sign-in-container del">
+        <div className="form-container right-container del">
           <h1>House Finder</h1>
           <p>
             House Finder es un web scraper que genera un CSV a partir de las
-            propiedades listadas en fincaraiz.com.co. Descarge su archivo csv
-            con su busqueda deseada y navegue entre los resultados de forma
+            propiedades listadas en fincaraiz.com.co. Descargue su archivo CSV
+            con su búsqueda deseada y navegue entre los resultados de forma
             sencilla.
           </p>
           <p>
             El CSV contiene nombre, precio, metros cuadrados entre otros
             detalles.
           </p>
+          <p>
+            Esta es una versión de prueba si necesita obtener más resultados
+            puede clonar mi repositorio y ejecutar localmente o contactarme y
+            con mucho gusto le ayudare.
+          </p>
           <h2>Instrucciones</h2>
-          <li>1)Ingrese los datos de busqueda</li>
-          <li>2)Espere a que el scraper complete la busqueda</li>
+          <li>1)Ingrese los datos de búsqueda</li>
+          <li>2)Espere a que el scraper complete la búsqueda (1:30m)</li>
           <li>
-            3)Cuando se complete la busqueda aparecera el boton de descarga
+            3)Cuando se complete la búsqueda aparecerá el botón de descarga
           </li>
-          <li>4)Descargue el archivo CSV con la informacion</li>
+          <li>4)Descargue el archivo CSV con la información</li>
           <p>Follow Me:</p>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/felipemontes"
+          >
+            Code
+          </a>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/felipemontes"
+          >
+            Github
+          </a>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.linkedin.com/in/felipe-londono/"
+          >
+            LinkedIn
+          </a>
         </div>
       </div>
     );
