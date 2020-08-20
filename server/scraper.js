@@ -1,16 +1,19 @@
 const puppet = require("puppeteer");
 const fs = require("fs-extra");
+const { nanoid } = require("nanoid");
 
 async function getProperties(iterUrl, TOTAL) {
   console.log("Welcome to the scrapper");
   console.log("TOTAL PAGES TO ITERATE: ", TOTAL);
+  let outName = nanoid(5) + ".csv";
+  console.log("El nombre del archivo seria: ", outName);
 
   try {
-    const exists = await fs.pathExists("out.csv");
+    const exists = await fs.pathExists(outName);
 
     if (!exists) {
       await fs.writeFile(
-        "out.csv",
+        outName,
         "Actualizado,URL,Ubicación,Precio,Admon,Area Priv.,Area Const.,Habitaciones,Baños,Parqueaderos\n"
       );
     }
@@ -168,13 +171,13 @@ async function getProperties(iterUrl, TOTAL) {
         console.log("Parqueaderos: ", parkings);
 
         await fs.appendFile(
-          "out.csv",
+          outName,
           `"${date}","${publi_url}","${ubication}","${price}","${admin}","${privArea}","${area}","${bedrooms}","${bathrooms}","${parkings}"\n`
         );
       }
       await browser.close();
     }
-    return "out.csv";
+    return outName;
   } catch (error) {
     console.error("My error: ", error);
   }
