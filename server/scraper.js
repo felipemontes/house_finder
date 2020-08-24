@@ -1,21 +1,13 @@
 const puppet = require("puppeteer");
-const fs = require("fs-extra");
-const { nanoid } = require("nanoid");
+const db = require("./mysql");
 
-async function getProperties(iterUrl, TOTAL) {
-  let outName = nanoid(5) + ".csv";
-
+async function getProperties(iterUrl, table) {
   try {
-    const exists = await fs.pathExists(outName);
-
-    if (!exists) {
-      await fs.writeFile(
-        outName,
-        "Actualizado,URL,Ubicación,Precio,Admon,Area Priv.,Area Const.,Habitaciones,Baños,Parqueaderos\n"
-      );
-    }
+    console.log("WELCOME TO SCRAPER");
     // iterate over number of pages
-    for (let page_num = 1; page_num <= TOTAL; page_num++) {
+    for (let page_num = 1; page_num <= 2; page_num++) {
+      newUrl = iterUrl.replace("REP", `${page_num}`);
+
       const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
       await page.setDefaultNavigationTimeout(0);
@@ -23,14 +15,14 @@ async function getProperties(iterUrl, TOTAL) {
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
       );
 
-      newUrl = iterUrl.replace("REP", `${page_num}`);
       await page.goto(newUrl);
 
       await page.waitForSelector("#divAdverts");
+
       const publications = await page.$$(".advert");
 
       // iterate over number of publications (publications.length)
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 2; i++) {
         await page.goto(newUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
@@ -46,6 +38,15 @@ async function getProperties(iterUrl, TOTAL) {
           date = "Sin especificar";
         } else {
           date = await dates.$eval("span", (span) => span.innerHTML);
+        }
+
+        // publication id
+        const [ids] = await page.$x("//li[contains(., 'Código Fincaraiz:')]");
+        let pub_id;
+        if (ids === undefined) {
+          pub_id = "N/A";
+        } else {
+          pub_id = await ids.$eval("span", (span) => span.innerHTML);
         }
 
         //url
@@ -173,6 +174,7 @@ async function getProperties(iterUrl, TOTAL) {
 
         console.log(`--- PAGE NUMBER : ${page_num} ---`);
         console.log("Actualizado:", date);
+        console.log("Id de la publicaion: ", pub_id);
         console.log(publi_url);
         console.log("Ubicacion: ", ubication);
         console.log("Precio: ", price);
@@ -183,14 +185,24 @@ async function getProperties(iterUrl, TOTAL) {
         console.log("Baños: ", bathrooms);
         console.log("Parqueaderos: ", parkings);
 
-        await fs.appendFile(
-          outName,
-          `"${date}","${publi_url}","${ubication}","${price}","${admin}","${privArea}","${area}","${bedrooms}","${bathrooms}","${parkings}"\n`
-        );
+        //db saving
+        let post = {
+          publi_id: pub_id,
+          actualizado: date,
+          url: publi_url,
+          ubicacion: ubication,
+          precio: price,
+          admon: admin,
+          privarea: privArea,
+          area: area,
+          habitaciones: bedrooms,
+          banos: bathrooms,
+          parqueaderos: parkings,
+        };
+        await db.insert(table, post);
       }
       await browser.close();
     }
-    return outName;
   } catch (error) {
     console.error("My error: ", error);
   }
