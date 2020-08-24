@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 const config = require("./config");
-const { json } = require("express");
 
 const dbconf = {
   host: config.mysql.host,
@@ -37,7 +36,6 @@ function download(table) {
     connection.query(`SELECT * FROM ${table}`, (err, data) => {
       if (err) return reject(err);
       const jsonData = JSON.parse(JSON.stringify(data));
-      console.log(jsonData);
       resolve(jsonData);
     });
   });
