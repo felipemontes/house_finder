@@ -9,8 +9,7 @@ export default class Form extends Component {
     city: "",
     option: "",
     property: "",
-    quantity: 1,
-    downId: "",
+    tb: "",
   };
 
   onChange = (event) => {
@@ -25,9 +24,8 @@ export default class Form extends Component {
       city: this.state.city,
       option: this.state.option,
       property: this.state.property,
-      quantity: this.state.quantity,
     };
-    if (Object.values(inf).length !== 4) {
+    if (Object.values(inf).length !== 3) {
       this.errorManager();
     }
     try {
@@ -36,7 +34,7 @@ export default class Form extends Component {
       const response = await axios.post("http://localhost:3001/", inf);
       if (response.status === 200) {
         this.setState({
-          downId: response.data,
+          tb: response.data,
         });
         this.hideLoading();
         this.showDownload();
@@ -68,12 +66,13 @@ export default class Form extends Component {
   };
 
   download = async () => {
-    const getId = this.state.downId;
+    const downloadTb = this.state.tb;
     const output = new Date().toLocaleString() + ".csv";
-    const response = await axios({
-      method: "GET",
-      url: `http://localhost:3001/download/${getId}`,
-    });
+    const response = await axios.get(
+      `http://localhost:3001/download/${downloadTb}`
+    );
+    console.log("Este es el response: ", response);
+    console.log("Este es el response body: ", response.body);
     window.location.reload(false);
     window.open(fileDownload(response.data, output));
   };
@@ -102,8 +101,8 @@ export default class Form extends Component {
                 onChange={this.onChange}
               >
                 <option value=""></option>
-                <option value="bogota">Bogota</option>
-                <option value="medellin">Medellin</option>
+                <option value="bog">Bogota</option>
+                <option value="med">Medellin</option>
               </select>
             </label>
             <br />
@@ -118,8 +117,8 @@ export default class Form extends Component {
                 onChange={this.onChange}
               >
                 <option value=""></option>
-                <option value="apto">Apartamento</option>
-                <option value="casa">Casa</option>
+                <option value="apt">Apartamento</option>
+                <option value="cas">Casa</option>
               </select>
             </label>
             <br />
@@ -134,46 +133,9 @@ export default class Form extends Component {
                 onChange={this.onChange}
               >
                 <option value=""></option>
-                <option value="venta">Venta</option>
-                <option value="arriendo">Arriendo</option>
+                <option value="ven">Venta</option>
+                <option value="arr">Arriendo</option>
               </select>
-            </label>
-            <br />
-            <br />
-            <label>
-              Ingresa cantidad de páginas:
-              <br />
-              <br />
-              <label>
-                <input
-                  type="radio"
-                  name="quantity"
-                  value="1"
-                  checked={this.state.quantity === "1"}
-                  onChange={this.onChange}
-                />
-                1
-              </label>
-              {/* <label>
-                <input
-                  type="radio"
-                  name="quantity"
-                  value="2"
-                  checked={this.state.quantity === "2"}
-                  onChange={this.onChange}
-                />
-                2
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="quantity"
-                  value="3"
-                  checked={this.state.quantity === "3"}
-                  onChange={this.onChange}
-                />
-                3
-              </label> */}
             </label>
             <br />
             <br />
@@ -216,7 +178,7 @@ export default class Form extends Component {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/felipemontes"
+            href="https://github.com/felipemontes/house_finder"
           >
             Code
           </a>
