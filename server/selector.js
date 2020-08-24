@@ -1,6 +1,5 @@
 const getProperties = require("./scraper");
 process.on("message", async (msg) => {
-  console.log(msg);
   const response = await selectOptions(
     msg.city,
     msg.type,
@@ -13,14 +12,12 @@ process.on("message", async (msg) => {
 async function selectOptions(city, option, type, table) {
   //server input
   let iterUrl = "";
-  console.log(city);
   switch (city) {
     case "bogota":
       switch (type) {
         case "apto":
           switch (option) {
             case "arriendo":
-              console.log("Entro a arriendo aptos en bogota");
               iterUrl =
                 "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|REP||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
               break;
