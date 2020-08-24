@@ -3,14 +3,13 @@ const db = require("./mysql");
 
 async function getProperties(iterUrl, table) {
   try {
-    console.log("WELCOME TO SCRAPER");
     // iterate over number of pages
-    for (let page_num = 1; page_num <= 2; page_num++) {
+    for (let page_num = 1; page_num <= 4; page_num++) {
       newUrl = iterUrl.replace("REP", `${page_num}`);
 
       const browser = await puppet.launch({ headless: true });
       const page = await browser.newPage();
-      await page.setDefaultNavigationTimeout(0);
+      page.setDefaultNavigationTimeout(0);
       await page.setUserAgent(
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
       );
@@ -22,7 +21,7 @@ async function getProperties(iterUrl, table) {
       const publications = await page.$$(".advert");
 
       // iterate over number of publications (publications.length)
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < publications.length; i++) {
         await page.goto(newUrl);
         await page.waitForSelector("#divAdverts");
         const publications = await page.$$(".advert");
@@ -199,7 +198,11 @@ async function getProperties(iterUrl, table) {
           banos: bathrooms,
           parqueaderos: parkings,
         };
-        await db.insert(table, post);
+        try {
+          await db.insert(table, post);
+        } catch (error) {
+          console.log("[DB ERROR]: duplicate value");
+        }
       }
       await browser.close();
     }
