@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import fileDownload from "js-file-download";
 import swal from "sweetalert";
-
 import "./styles/Form.css";
 export default class Form extends Component {
   state = {
@@ -31,7 +30,7 @@ export default class Form extends Component {
     try {
       this.hideSearch();
       this.showLoading();
-      const response = await axios.post("http://localhost:3001/", inf);
+      const response = await axios.post("http://localhost:3001", inf);
       if (response.status === 200) {
         this.setState({
           tb: response.data,
@@ -39,7 +38,6 @@ export default class Form extends Component {
         this.hideLoading();
         this.showDownload();
       }
-      console.log(response.status);
     } catch (e) {
       this.errorManager();
     }
@@ -71,8 +69,6 @@ export default class Form extends Component {
     const response = await axios.get(
       `http://localhost:3001/download/${downloadTb}`
     );
-    console.log("Este es el response: ", response);
-    console.log("Este es el response body: ", response.body);
     window.location.reload(false);
     window.open(fileDownload(response.data, output));
   };
@@ -89,7 +85,7 @@ export default class Form extends Component {
           <h1>Crear lista</h1>
 
           <h3>Ingresa tus datos de búsqueda</h3>
-          <h6>*Versión de prueba Max 20 publicaciones *</h6>
+          <br />
           <form onSubmit={this.onSubmit}>
             <label>
               Selecciona una ciudad:
@@ -139,6 +135,8 @@ export default class Form extends Component {
             </label>
             <br />
             <br />
+            <br />
+            <br />
             <div className="align-center">
               <div id="loader" className="loader"></div>
             </div>
@@ -162,18 +160,12 @@ export default class Form extends Component {
             El CSV contiene nombre, precio, metros cuadrados entre otros
             detalles.
           </p>
-          <p>
-            Esta es una versión de prueba si necesita obtener más resultados
-            puede clonar mi repositorio y ejecutar localmente o contactarme y
-            con mucho gusto le ayudare.
-          </p>
           <h2>Instrucciones</h2>
           <li>1)Ingrese los datos de búsqueda</li>
-          <li>2)Espere a que el scraper complete la búsqueda (1:30m)</li>
           <li>
-            3)Cuando se complete la búsqueda aparecerá el botón de descarga
+            2)Cuando se complete la búsqueda aparecerá el botón de descarga
           </li>
-          <li>4)Descargue el archivo CSV con la información</li>
+          <li>3)Descargue el archivo CSV con la información</li>
           <p>Follow Me:</p>
           <a
             target="_blank"
