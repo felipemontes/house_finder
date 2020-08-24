@@ -1,19 +1,18 @@
 const getProperties = require("./scraper");
 process.on("message", async (msg) => {
+  console.log(msg);
   const response = await selectOptions(
     msg.city,
-    msg.quantity,
+    msg.type,
     msg.option,
-    msg.type
+    msg.table
   );
   process.send(response);
   process.exit();
 });
-async function selectOptions(city, quantity, option, type) {
+async function selectOptions(city, option, type, table) {
   //server input
   let iterUrl = "";
-  let TOTAL = quantity;
-
   console.log(city);
   switch (city) {
     case "bogota":
@@ -21,6 +20,7 @@ async function selectOptions(city, quantity, option, type) {
         case "apto":
           switch (option) {
             case "arriendo":
+              console.log("Entro a arriendo aptos en bogota");
               iterUrl =
                 "https://www.fincaraiz.com.co/apartamentos/arriendo/bogota/?ad=30|REP||||2||8|||67|3630001||||||||||||||||1|||1||griddate%20desc||||-1||";
               break;
@@ -86,6 +86,6 @@ async function selectOptions(city, quantity, option, type) {
       break;
   }
 
-  const answer = await getProperties(iterUrl, TOTAL);
-  return answer;
+  await getProperties(iterUrl, table);
+  return "Done";
 }
