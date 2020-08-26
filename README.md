@@ -22,13 +22,12 @@ Recuerde que tiene que crear un archivo de configuracion con la informacion de l
 ## Uso
 
 En una consola ingrese a la carpeta cliente y ejecute el siguiente codigo, se le abrira una ventana del navegador en donde encontrar la interfaz.
-
-![](https://i.imgur.com/IM78T8T.jpg)
-Para iniciar el scraper:
-
 ```python
 npm start
 ```
+
+![](https://i.imgur.com/IM78T8T.jpg)
+
 
 En una nueva consola ingrese a la carpeta servidor y ejecute el siguiente codigo, esto iniciara el servidor express y a su vez iniciara la cuenta regresiva para ejecutar los cron que obtienen los datos.
 ![](https://i.imgur.com/X16cFYd.jpg)
