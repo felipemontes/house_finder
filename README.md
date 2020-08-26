@@ -5,28 +5,33 @@ House Scraper es un web scraper que genera un CSV con todos los apartamentos en 
 
 ## Instalación
 
-Debe tener instalado npm para correr el scraper
+Clone el repositorio y ejecute el siguiente codigo en la carpeta cliente y servidor para descargar todos los paquetes necesarios.
 
 ```bash
 cd house_scraper
+cd client
 npm install
+cd ..
+cd server
+npm install
+
 ```
+Recuerde que tiene que crear un archivo de configuracion con la informacion de la base de datos y ajustar la hora que aparece dentro del archivo cron.js dentro de la carpeta servidor.
+
 
 ## Uso
 
-Primero debe configurar la cantidad de paginas que desea recorrer con el scraper, para esto entre al archivo scrapper.js con cualquier editor de código y cambie la variable TOTAL con el valor deseado.
+En una consola ingrese a la carpeta cliente y ejecute el siguiente codigo, se le abrira una ventana del navegador en donde encontrar la interfaz.
 
-![](https://i.imgur.com/JLa82Nl.jpg)
+![](https://i.imgur.com/IM78T8T.jpg)
 Para iniciar el scraper:
 
 ```python
-node scrapper.js
+npm start
 ```
 
+En una nueva consola ingrese a la carpeta servidor y ejecute el siguiente codigo, esto iniciara el servidor express y a su vez iniciara la cuenta regresiva para ejecutar los cron que obtienen los datos.
 ![](https://i.imgur.com/X16cFYd.jpg)
-
-En la consola se van a ir viendo los diferentes datos obtenidos y cuando el scraper termine va a quedar un archivo llamado out.csv donde van a quedar guardados todos los datos obtenidos
-
 ![](https://i.imgur.com/7DBRELu.jpg)
 
 ## Contribuir
