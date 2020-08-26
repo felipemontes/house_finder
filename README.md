@@ -29,6 +29,10 @@ npm start
 
 
 En una nueva consola ingrese a la carpeta servidor y ejecute el siguiente codigo, esto iniciara el servidor express y a su vez iniciara la cuenta regresiva para ejecutar los cron que obtienen los datos.
+```python
+node server.js
+```
+
 ![](https://i.imgur.com/X16cFYd.jpg)
 ![](https://i.imgur.com/7DBRELu.jpg)
 
